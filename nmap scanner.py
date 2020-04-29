@@ -11,6 +11,9 @@ ip_addr = input("Enter the IP address you want to scan: ")
 
 response = input("1)SYN Scan 2)UDP Scan 3) Ping scan 4)Full Scan \n")
 
+def default_scan(ip_addr):
+    print("Ip Status: ", scanner[ip_addr].state())
+    print(scanner[ip_addr].all_protocols())
 
 if response == '1':
     scanner.scan(ip_addr, '1-1024', '-v -sS') 
@@ -39,9 +42,6 @@ elif response == '4':
 elif response >= '5':
     print("Invalid option")
 
-def default_scan(ip_addr):
-    print("Ip Status: ", scanner[ip_addr].state())
-    print(scanner[ip_addr].all_protocols())
 
 
 
