@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Automating scan using nmap package in python
+# Automating scan using nmap library in python
 
 import nmap
 
@@ -7,38 +7,32 @@ scanner = nmap.PortScanner()
 
 print("Welcome to Nmap scanner{}", scanner.nmap_version())
 
-ip_addr = input("Enter the IP address you want to scan: ")
+ports = '1-1024'
+protocols = ['tcp', 'udp', 'icmp']
+scan_modes = ['-sS', '-sU', '-sP', '-sS -sV -sC -A -O']
 
-response = input("1)SYN Scan 2)UDP Scan 3) Ping scan 4)Full Scan \n")
-
-def default_scan(ip_addr, protocol):
-    print("Ip Status: ", scanner[ip_addr].state())
-    print(scanner[ip_addr].all_protocols())
-    print("Open Ports: ", scanner[ip_addr][protocol].keys())
-
-if response == '1':
-    scanner.scan(ip_addr, '1-1024', '-v -sS') 
+def scan_function(ip_addr, ports, protocols, modes):
+    scanner.scan(ip_addr, ports, modes)                            #Performs scan as per mentioned mode 
     print(scanner.scaninfo())
-    protocol = 'tcp'
+    print("Ip Status: ", scanner[ip_addr].state())                 #Displays the state of the ip
+    print(scanner[ip_addr].all_protocols())                        #Displays all available Ports
+    print("Open Ports: ", scanner[ip_addr][protocols].keys())      #Displays Open Ports
+
+ip_addr = input("Enter an ip address to scan")
+
+response = input("Type of scan - 1.SYN 2.UDP 3.PING 4.FULL SCAN. Enter the number or type - ")
  
-elif response == '2':
-    scanner.scan(ip_addr, '1-1024', '-v -sU')
-    print(scanner.scaninfo())
-    protocol = 'udp'
+if response == '1' or 'SYN':
+   scan_function(ip_addr, ports, protocols[0], scan_modes[0]) 
+   
+elif response == '2' or 'UDP':
+    scan_function(ip_addr, ports, protocols[1], scan_modes[1])
     
-elif response == '3':
-    scanner.scan(ip_addr, '1-1024', '-v -sP')
-    print(scanner.scaninfo())
-    protocol = 'icmp'
-    
-elif response == '4':
-    scanner.scan(ip_addr, '1-1024', '-v -sS -sV -sC -A -O')
-    print(scanner.scaninfo())
-    protocol = 'tcp'
+elif response == '3' or 'PING':
+    scan_function(ip_addr, ports, protocols[2], scan_modes[2])
+
+elif response == '4' or 'FULL SCAN':
+    scan_function(ip_addr, ports, protocols[0], scan_modes[3])
     
 elif response >= '5':
     print("Invalid option")
-    
-default_scan(ip_addr, protocol)
-
-
